@@ -4,7 +4,7 @@
 
 The **OCPS** class (short for *Optimal Control Problem Solver*) solves general continuous nonlinear programs of the form:
 
-\[
+$$
 \begin{aligned}
 \text{minimize}_{x\in\mathbb{R}^n}\quad & f(x_1,\cdots,x_T) \\
 \text{subject to}\quad & c_i(x_1,\cdots,x_T) = 0,\; i\in\mathcal{E}, \\
@@ -12,7 +12,7 @@ The **OCPS** class (short for *Optimal Control Problem Solver*) solves general c
 & x_{\min,t} \le x_t \le x_{\max,t}, \forall t \in [T]\\
 & \text{Initial conditions specifiable.}
 \end{aligned}
-\]
+$$
 
 Here, \(f\) is the objective, \(c_i\) are equality/inequality constraints, and \(x_{\min}, x_{\max}\) are variable bounds. You provide gradients and hessians for the objective and each constraint as a dictionary, thereby empowering you to define $f$ and $c$ arbitrary functions of the continuous variable $x$.
 
@@ -25,8 +25,6 @@ The solver builds on **Ipopt** via `cyipopt`. It allows you to:
 - Prevent accidental asymmetric Hessian definitions by raising an error if both `(i, j)` and `(j, i)` are added.
 - Provide sparse structures for Jacobian/Hessian lookup.
 - Save the final solution (primal and dual) as a `.npz` file if desired.
-
-**Important Note on Python Late Binding**: If you define gradients or Hessians in a loop, be mindful of Python's late binding for lambda/functions. You should capture the loop variable in a default argument, e.g., `lambda x, idx=idx: ...`, or else the derivative definitions may all refer to the final loop variable value.
 
 ## Defining a Problem
 
@@ -110,17 +108,17 @@ The solver builds on **Ipopt** via `cyipopt`. It allows you to:
 ## Example Problem
 
 We are minimizing
-\[
+$$
 \min_{x_0, x_1} \quad x_0^2 + x_1^2
-\]
+$$
 subject to
-\[
+$$
 \begin{cases}
 x_0 = 3 \quad (\text{an equality}),\\
 x_1 \le 2 \quad (\text{an inequality}),\\
 x_0 \ge 0,\, x_1 \ge 0 \quad (\text{bounds}).
 \end{cases}
-\]
+$$
 
 In code:
 
@@ -166,14 +164,14 @@ print("Duals:", dual_dict)
 Here, we illustrate a more general nonlinear problem:
 
 Objective:
-\[
+$$
 \min_{(x_0, x_1)}\; (x_0 - 2)^2 + 3\sin(x_1),
-\]
+$$
 subject to the nonlinear inequality constraint:
-\[
+$$
 x_0^2 - x_1 - 2 \le 0,
-\]
-plus any bounds you see fit (e.g., x_0 >= 0, x_1 unbounded).
+$$
+plus any bounds you see fit (e.g., $x_0 >= 0$, $x_1$ unbounded).
 
 Example code:
 
